@@ -4,16 +4,13 @@
     [clojure.java.io :as io]
     [oauth.v1 :as oauth]
     [cheshire.core :as json]
-    [clojure.walk :as walk])
-  (:use
-    ;; [clojure.data.json :only (read-json json-str)]
-    [clj-http.client :only [generate-query-string]]
-    [clj-http.util :only [url-decode]]
-    [slingshot.slingshot :only [throw+]]
-    [clojure.java.io :only (reader)])
+    [clojure.walk :as walk]
+    [clj-http.client :refer [generate-query-string]]
+    [clj-http.util :refer [url-decode]]
+    [slingshot.slingshot :refer [throw+]]
+    [clojure.java.io :refer [reader]])
   (:import
-    [java.io
-     InputStream]))
+   [java.io InputStream]))
 
 ;;;
 
