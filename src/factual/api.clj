@@ -6,7 +6,7 @@
     [cheshire.core :as json]
     [clojure.walk :as walk])
   (:use
-    [clojure.data.json :only (read-json json-str)]
+    ;; [clojure.data.json :only (read-json json-str)]
     [clj-http.client :only [generate-query-string]]
     [clj-http.util :only [url-decode]]
     [slingshot.slingshot :only [throw+]]
@@ -100,7 +100,7 @@
        ;; query param value
        (if (or (keyword? v) (string? v))
             (name v)
-            (json-str v))))
+            (json/generate-string v))))
    {} m))
 
 (defn- debug-rsp [resp]
@@ -432,7 +432,7 @@
              :query3 {:api reverse-geocode* :args [34.06021 -118.41828]}})"
   [m]
   (let [queries  (into {} (for [[k v] m] [k (multi-query v)]))]
-    (execute-request {:method :get :path "multi" :params {:queries (json-str queries)} })))
+    (execute-request {:method :get :path "multi" :params {:queries (json/generate-string queries)} })))
 
 ;;;
 
