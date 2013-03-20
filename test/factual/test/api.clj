@@ -3,7 +3,6 @@
             [sosueme.conf :as conf])
   (:import [factual.api factual-error])
   (:use [clojure.test]
-        [clojure.data.json :only (json-str read-json)]
         [slingshot.slingshot]))
 
 (defn connect
