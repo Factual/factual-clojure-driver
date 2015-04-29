@@ -5,5 +5,4 @@
                  [cheshire "5.4.0"]
                  [slingshot "0.10.3"]
                  [mavericklou/oauth-clj "0.1.4.1"]
-                 [factual/sosueme "0.0.15"]]
-  :aot :all)
+                 [factual/sosueme "0.0.15"]])
