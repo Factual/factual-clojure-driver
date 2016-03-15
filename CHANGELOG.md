@@ -1,3 +1,6 @@
+## 1.5.3
+  * Removed aot compiling, thanks @travis
+
 ## 1.5.2
   * Upgrade to use clojure 1.6.0
 
