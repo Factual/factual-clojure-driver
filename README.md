@@ -7,7 +7,7 @@ This is the Factual-supported Clojure driver for [Factual's public API](http://d
 The driver is hosted at [Clojars](https://clojars.org/factual/factual-clojure-driver). Just add this to your dependencies:
 
 ```clojure
-[factual/factual-clojure-driver "1.5.3"]
+[factual/factual-clojure-driver "1.5.4"]
 ```
 
 # Setup
@@ -330,33 +330,33 @@ See the docs on `facets` for more details.
 
 # Crosswalk
 
-Crosswalk provides a translation between Factual IDs, third party IDs, and URLs that represent the same entity across the internet. You use Crosswalk as a table called 'crosswalk'.
+Crosswalk provides a translation between Factual IDs, third party IDs, and URLs that represent the same entity across the internet. You use Crosswalk as a table called 'crosswalk-[ISO two letter country code]'.
 
 Examples:
 
 ```clojure
 ;; Lookup the Yelp Crosswalk entry for The Stand, using on its Yelp page
-(fact/fetch {:table :crosswalk
+(fact/fetch {:table :crosswalk-us
              :filters {:url "http://www.yelp.com/biz/the-stand-los-angeles-5"}})
 ```
 
 ```clojure
 ;; Lookup The Stand's Crosswalk entry using its Foursquare ID
-(fact/fetch {:table :crosswalk
+(fact/fetch {:table :crosswalk-us
              :filters {:namespace :foursquare
                        :namespace_id "4a651cb1f964a52052c71fe3"}})
 ```
 
 ```clojure
 ;; Find all Crosswalk entries that Factual has for The Stand
-(fact/fetch {:table :crosswalk
-             :filters {:factual_id "39599c9b-8943-4c15-999d-c03f6c587881"}})
+(fact/fetch {:table :crosswalk-us
+             :filters {:factual_id "3b9e2b46-4961-4a31-b90a-b5e0aed2a45e"}})
 ```
 
 ```clojure
 ;; Find the OpenMenu Crosswalk entry for The Stand, by Factual ID
 (fact/fetch {:table :crosswalk
-             :filters {:factual_id "39599c9b-8943-4c15-999d-c03f6c587881"
+             :filters {:factual_id "3b9e2b46-4961-4a31-b90a-b5e0aed2a45e"
                        :namespace :openmenu}})
 ```
 
@@ -498,7 +498,7 @@ Available pulses include commercial_density, commercial_profile, income, race, h
 
 You can see a full list of available Factual pulses and their possible return values, as well as full documentation, in [the Factual API docs for Geopuls](http://developer.factual.com/display/docs/Places+API+-+Geopulse).
 
-# Reverse Geocoder
+# Geotag (Fctual's reverse geocoder)
 
 Given a latitude and longitude, uses Factual's reverse geocoder to return the nearest valid address.
 

@@ -16,7 +16,7 @@
 
 ;;;
 
-(def ^:private DRIVER_VERSION_TAG "factual-clojure-driver-v1.5.1")
+(def ^:private DRIVER_VERSION_TAG "factual-clojure-driver-v1.5.4")
 
 (def ^:private ^:dynamic consumer-atom (atom nil))
 
@@ -441,8 +441,7 @@
    Example usage:
 
      (multi {:query1 {:api fetch* :args [{:table :global :q \"cafe\" :limit 10}]}
-             :query2 {:api facets* :args [{:table :global :select \"locality,region\" :q \"http://www.starbucks.com\"}]}
-             :query3 {:api reverse-geocode* :args [34.06021 -118.41828]}})"
+             :query2 {:api facets* :args [{:table :global :select \"locality,region\" :q \"http://www.starbucks.com\"}]}})"
   [m]
   (let [queries  (into {} (for [[k v] m] [k (multi-query v)]))]
     (execute-request {:method :get :path "multi" :params {:queries (json/generate-string queries)} })))
@@ -492,46 +491,6 @@
      :duplicate, :inaccurate, :inappropriate, :nonexistent, :spam, :other"
   [id f]
   (execute-request (flag* id f)))
-
-;;;
-
-(defn geopulse*
-  "Returns a query for geopulse requests, which can be passed into 'execute-request' or used within 'multi'."
-  [q]
-  {:path "places/geopulse" :params q})
-
-(defn geopulse
-  "Runs a Geopulse request against Factual and returns the results.
-
-   q is a hash-map specifying the Geopulse query. It must contain :geo.
-   It can optionally contain :select. If :select is included, it must be a
-   comma delimited list of available Factual pulses, such as \"income\",
-   \"race\", \"age_by_gender\", etc.
-
-   Example usage:
-   (geopulse {:geo {:$point [34.06021,-118.41828]}})
-
-   Example usage:
-   (geopulse {:geo {:$point [34.06021,-118.41828]} :select \"income,race,age_by_gender\"})"
-  [q]
-  (execute-request (geopulse* q)))
-
-;;;
-
-(defn reverse-geocode*
-  "Returns a query for reverse-geocode requests, which can be passed into 'execute-request' or used within 'multi'."
-  [lat lon]
-  {:path "places/geocode" :params {:geo { :$point [lat lon]}}})
-
-(defn reverse-geocode
-  "Given latitude lat and longitude lon, uses Factual's reverse geocoder to return the
-   nearest valid address.
-
-   Example usage:
-
-     (reverse-geocode 34.06021,-118.41828)"
-  [lat lon]
-  (execute-request (reverse-geocode* lat lon)))
 
 ;;;
 
