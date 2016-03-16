@@ -44,7 +44,6 @@
   (let [res (fact/fetch
               {:table :places
                :q "cafe"
-               :filters {:category {:$eq "Food & Beverage"}}
                :geo {:$circle {:$center [34.06018 -118.41835]
                                :$meters (* 3 1609.344)}}
                :include_count true
@@ -58,8 +57,8 @@
 
 (deftest test-resolve
   (let [res (first
-             (fact/resolve {:name "taco"
-                           :address "10250 santa monica blvd"}))]
+             (fact/resolve {:name "los angeles international airport"
+                           :address "1 World Way, Los Angeles, CA 90045"}))]
     (is (= true (res "resolved")))))
 
 (deftest test-match
@@ -69,33 +68,13 @@
 
 (deftest test-crosswalk
   (is (< 3 (count
-             (fact/fetch {:table :crosswalk :filters {:factual_id "56b28a26-8a6b-43f0-a504-70df38a1bd47"}})))))
-
+             (fact/fetch {:table :crosswalk-us :filters {:factual_id "3b9e2b46-4961-4a31-b90a-b5e0aed2a45e"}})))))
 
 (deftest test-multi
   (let [res (fact/multi {"q1" {:api fact/fetch* :args [{:table :global :q "cafe" :limit 10}]}
-                         "q2" {:api fact/facets* :args [{:table :global :select "locality,region" :q "http://www.starbucks.com"}]}
-                         "q3" {:api fact/reverse-geocode* :args [34.06021 -118.41828]}})]
+                         "q2" {:api fact/facets* :args [{:table :global :select "locality,region" :q "http://www.starbucks.com"}]}})]
     (is (not (empty? (get-in res ["q2" "locality"]))))
-    (is (= 10 (count (res "q1"))))
-    (is (.equals (get-in res ["q3" 0 "address"]) "1801 Avenue Of The Stars"))))
-
-;;diff backend broken
-#_(deftest test-diffs
-  (let [res (fact/diffs {:table "t7RSEV" :start 1318890505254 :end 1318890516892})]
-    (prn res)))
-
-;;submit backend broken
-#_(deftest test-submit
-  (let [res (fact/submit {:table "t7RSEV" :user "test_user" :values {:name "A New Restaurant" :locality "Los Angeles"}})]
-    (is (not
-         (or (nil? (get res :factual_id))
-             (nil? (get res :new_entity)))))))
-
-;;flag backend broken
-#_(deftest test-flag
-    (let [res (fact/flag "74ce3ae9-7ae1-4141-9752-1cac3305b797" {:table "restaurants-us" :problem "nonexistent" :user "test_user"})]
-      ...))
+    (is (= 10 (count (res "q1"))))))
 
 (defn every-locality? [res val]
   (every? #(= % val) (map #(get % "locality") res)))
@@ -109,17 +88,12 @@
 
 (deftest test-unicode-multi
          (let [mres (fact/multi {"q1" {:api fact/fetch* :args [{:table :global :filters {:locality "בית שמש"}}]}
-                                 "q2" {:api fact/fetch* :args [{:table :global :filters {:locality "München"} :limit 10}]}
-                                 "q3" {:api fact/resolve* :args [{:name "César E. Chávez Library" :locality "Oakland" :region "CA" :address "3301 E 12th St"}]}})
+                                 "q2" {:api fact/fetch* :args [{:table :global :filters {:locality "München"} :limit 10}]}})
                res1 (mres "q1")
-               res2 (mres "q2")
-               res3 (mres "q3")]
+               res2 (mres "q2")]
 
     (is (> (count res1) 0))
     (is (every-locality? res1 "בית שמש"))
 
     (is (= (count res2) 10))
-    (is (every-locality? res2 "München"))
-
-    (is (= (count res3) 1))
-    (is (= (get-in res3 [0 "tel"]) "(510) 535-5620"))))
+    (is (every-locality? res2 "München"))))

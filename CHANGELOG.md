@@ -1,9 +1,14 @@
+## 1.5.4 (unreleased)
+  * Removed support for reverse geocoder (only available with Geotag and newer API version)
+  * Updated crosswalk docs and tests to include country ISO code in table name
+  * Updated tests to pass
+  * Updated api/DRIVER_VERSION_TAG (was out of date since 1.5.2)
+
 ## 1.5.3
   * Removed aot compiling, thanks @travis
 
 ## 1.5.2
   * Upgrade to use clojure 1.6.0
-
 
 ## 1.5.1
   * Added support for Get A Row (fetch-row)
